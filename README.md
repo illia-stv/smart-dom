@@ -20,8 +20,7 @@ Then, import it into your JavaScript/TypeScript file:
 import SmartDOM from 'smart-dom';
 ```
 
-##
-Finding Elements
+## Finding Elements
 
 You can use SmartDOM to find elements in the DOM using various criteria:
 
