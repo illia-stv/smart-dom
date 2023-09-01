@@ -45,9 +45,9 @@ const elementsByAttributes = smartDOM.find({
 });
 ```
 
-API
+# API
 
-`SmartDOM(window: Window)`
+### SmartDOM(window: Window)
 
 The constructor accepts a `window` object, which is used for DOM manipulation. It initializes the SmartDOM instance.
 
@@ -56,14 +56,14 @@ Finds elements in the DOM based on the provided options.
 
 - `options` (OptionType): An object specifying the criteria for finding elements.
 
-`OptionType`
+### OptionType
 An object with optional properties for specifying the criteria to find elements:
 
 - text (string): Text content to search for within elements.
 - tagName (string): The tag name of elements to search for.
 - attributes (AttributeType): An object specifying attribute-value pairs to match elements.
 
-`AttributeType`
+### AttributeType
 An object where keys represent attribute names, and values represent the expected attribute values. Values can be strings or `true` for attribute existence checks.
 
 License
