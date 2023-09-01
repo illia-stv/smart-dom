@@ -79,7 +79,7 @@ export default class SmartDOM {
     return matches;
   }
 }
-
+ 
 type AttributeType = {
   [ key: string ] : string | true;
 }
