@@ -38,7 +38,7 @@ The following behaviors are considered unacceptable within the SmartDOM project 
 
 ## Reporting Violations
 
-If you believe someone has violated this Code of Conduct, please report it to the project maintainers at [project-email@example.com](mailto:project-email@example.com). All reports will be kept confidential, and we will investigate and take appropriate action as necessary.
+If you believe someone has violated this Code of Conduct, please report it to the project maintainers at [ilya@sheremetov.com](ilya@sheremetov.com). All reports will be kept confidential, and we will investigate and take appropriate action as necessary.
 
 ## Enforcement
 
