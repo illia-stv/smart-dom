@@ -65,5 +65,5 @@ An object with optional properties for specifying the criteria to find elements:
 ### AttributeType
 An object where keys represent attribute names, and values represent the expected attribute values. Values can be strings or `true` for attribute existence checks.
 
-License
+# License
 This project is licensed under the MIT License - see the LICENSE file for details.
