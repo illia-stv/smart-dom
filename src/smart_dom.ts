@@ -15,8 +15,12 @@ export default class SmartDOM {
     this._document = this._window.document;
   }
 
-  find( options: OptionType ): Array<Element> {
+  find( options?: OptionType ): Array<Element> | null {
     const arr = [];
+
+    if( !options ){
+      return null;
+    }
 
     if( options.text ) {
       arr.push(this._findByText( options.text ))
