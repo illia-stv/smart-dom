@@ -80,11 +80,11 @@ export default class SmartDOM {
   }
 }
  
-type AttributeType = {
+interface AttributeType {
   [ key: string ] : string | true;
 }
 
-type OptionType = {
+interface OptionType {
   text?: string,
   tagName?: string,
   attributes?: AttributeType
