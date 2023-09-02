@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
 
-export function findIntersaction( arr: Array<Array<Element>> ) {
+export function findIntersection( arr: Array<Array<Element>> ) {
     const firstArr = arr[ 0 ];
     const restArr = arr.slice( 1 );
     const matches = [];

@@ -1,17 +1,17 @@
-import { findIntersaction, traverseDOM } from './utils';
+import { findIntersection, traverseDOM } from './utils';
 
 export default class SmartDOM {
 
+  private _document: Document;
+  
   private _window: Window;
 
-  private _document: Document;
-
-  constructor( _window: Window ) {
-    if ( !_window ) {
-      throw new Error( 'Window is not defined' );
+  constructor( currentWindow: Window ) {
+    if ( !currentWindow ) {
+      throw new Error( "Window is not defined" );
     } 
 
-    this._window = _window || window;
+    this._window = currentWindow || window;
     this._document = this._window.document;
   }
 
@@ -30,7 +30,7 @@ export default class SmartDOM {
       arr.push(this._findByTagName( options.tagName ))
     }
 
-    return findIntersaction( arr );
+    return findIntersection( arr );
   }
 
   _findByText ( text: string ): Array<Element> {
@@ -53,7 +53,7 @@ export default class SmartDOM {
         return;
       }
 
-      for (let attributeName in attribute) {
+      for (const attributeName in attribute) {
         if( node.nodeType === 1 && node.getAttribute( attributeName ) === attribute[ attributeName ] ) {
           matches.push( node );
         }

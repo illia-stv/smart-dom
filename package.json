@@ -1,19 +1,27 @@
 {
   "name": "smart-dom-search",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "entryPoint": "src/index.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.197",
-    "typescript": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "6.5.0",
+    "@typescript-eslint/parser": "6.5.0",
+    "eslint": "8.48.0",
+    "typescript": "5.2.2",
     "vite": "^4.4.5"
   },
   "dependencies": {
     "lodash": "^4.17.21"
-  }
+  },
+  "author": "Illia Sheremetov",
+  "email": "ilya@sheremetov.com",
+  "license": "MIT"
 }
