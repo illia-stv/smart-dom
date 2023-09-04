@@ -8,4 +8,5 @@ module.exports = {
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-indexed-object-style': 'off'
     },
+    "ignorePatterns": ["dist/"]
   };
