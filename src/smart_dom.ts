@@ -16,25 +16,25 @@ export default class SmartDOM {
   }
 
   find( options?: OptionType ): Array<Element> | null {
-    const arr = [];
+    const collection = [];
 
     if( !options ){
       return null;
     }
 
     if( options.text ) {
-      arr.push(this._findByText( options.text ))
+      collection.push(this._findByText( options.text ))
     }
 
     if( options.attributes ) {
-      arr.push(this._findByAttributes( options.attributes ))
+      collection.push(this._findByAttributes( options.attributes ))
     }
 
     if( options.tagName ) {
-      arr.push(this._findByTagName( options.tagName ))
+      collection.push(this._findByTagName( options.tagName ))
     }
 
-    return findIntersection( arr );
+    return findIntersection( collection );
   }
 
   _findByText ( text: string ): Array<Element> {
