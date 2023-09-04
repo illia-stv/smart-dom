@@ -6,12 +6,12 @@ export default class SmartDOM {
   
   private _window: Window;
 
-  constructor( currentWindow: Window ) {
-    if ( !currentWindow ) {
+  constructor( window: Window ) {
+    if ( !window ) {
       throw new Error( "Window is not defined" );
     } 
 
-    this._window = currentWindow || window;
+    this._window = window;
     this._document = this._window.document;
   }
 
