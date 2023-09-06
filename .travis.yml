@@ -6,7 +6,7 @@ cache:
 node_js: 16
 branches:
   only:
-    - mater
+    - master
 notifications:
   email: false
 script:
