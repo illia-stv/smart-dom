@@ -15,6 +15,9 @@ export default class SmartDOM {
     this._document = this._window.document;
   }
 
+  /*
+  * This method is for finding elements in DOM
+  */
   findElement( options?: OptionType ): Array<Element> | null {
     const collection = [];
 
