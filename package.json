@@ -1,10 +1,18 @@
 {
   "name": "smart-dom",
-  "private": true,
-  "version": "1.0.0",
+  "private": false,
+  "version": "1.0.1",
   "type": "module",
   "entryPoint": "src/index.ts",
-  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
     "prebuild": "rimraf dist",
