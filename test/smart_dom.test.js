@@ -18,9 +18,9 @@ describe('SmartDom', () => {
         document.body.children[ 0 ].remove();
     } ) 
 
-    describe( 'find()', () => {
+    describe( 'findElement()', () => {
         test( 'should return null if there is no options', () => {
-            expect(smartDom.find()).toBe( null )
+            expect(smartDom.findElement()).toBe( null )
         } )
     
         test( 'should return proper DOM element by text option', () => {
@@ -30,7 +30,7 @@ describe('SmartDom', () => {
             
             itemCreatedSyntactically.textContent = elementsContent;
             
-            const matches = smartDom.find( {
+            const matches = smartDom.findElement( {
                 text: elementsContent
             } )
         

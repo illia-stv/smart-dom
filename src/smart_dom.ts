@@ -15,7 +15,7 @@ export default class SmartDOM {
     this._document = this._window.document;
   }
 
-  find( options?: OptionType ): Array<Element> | null {
+  findElement( options?: OptionType ): Array<Element> | null {
     const collection = [];
 
     if( !options ){
