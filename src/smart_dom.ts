@@ -17,6 +17,8 @@ export default class SmartDOM {
 
   /*
   * This method is for finding elements in DOM with given options.
+  *
+  * options: you could define type of your DOM element.  
   */
   findElement( options?: OptionType ): Array<Element> | null {
     const collection = [];
