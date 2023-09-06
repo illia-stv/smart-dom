@@ -1,6 +1,6 @@
 import { findIntersection, traverseDOM } from './utils';
 
-export default class SmartDOM {
+class SmartDOM {
 
   private _document: Document;
   
@@ -98,3 +98,5 @@ interface OptionType {
   tagName?: string,
   attributes?: AttributeType
 }
+
+export default SmartDOM;
