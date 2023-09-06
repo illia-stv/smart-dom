@@ -1,0 +1,13 @@
+sudo: false
+language: node_js
+cache: 
+  directories:
+    - node_modules
+node_js: 16
+branches:
+  only:
+    - mater
+notifications:
+  email: false
+script:
+  - yarn run validate
