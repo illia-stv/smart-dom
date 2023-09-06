@@ -1681,10 +1681,10 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+lodash@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-1.0.0.tgz#2535c2f7dcb6937cee8d2672c5f7138eee0df6a9"
+  integrity sha512-WHDYO0qSDoEe4PJznK52IoMBj2szpaTUnG6iJarwjeW0LymFN46KNDoiOLOt4OS78e1e+A9jQrfbMNxue6l3GQ==
 
 loupe@^2.3.1, loupe@^2.3.6:
   version "2.3.6"
@@ -2278,6 +2278,7 @@ std-env@^3.3.3:
   integrity sha512-f9aPhy8fYBuMN+sNfakZV18U39PbalgjXG3lLB9WkaYTxijru61wb57V9wxxNthXM5Sd88ETBWi29qLAsHO52Q==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==

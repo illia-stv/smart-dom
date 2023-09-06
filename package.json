@@ -1,9 +1,10 @@
 {
-  "name": "smart-dom-search",
+  "name": "smart-dom",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "entryPoint": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "vite",
     "prebuild": "rimraf dist",
@@ -32,8 +33,11 @@
     "vite": "^4.4.5",
     "vitest": "0.34.3"
   },
-  "dependencies": {
-    "lodash": "^4.17.21"
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "lodash": "^1.0.0"
   },
   "config": {
     "ghooks": {
@@ -42,5 +46,8 @@
   },
   "author": "Illia Sheremetov",
   "email": "ilya@sheremetov.com",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "1.0.0"
+  }
 }
