@@ -1,1 +1,3 @@
-export { default as SmartDom } from './smart_dom';
+import SmartDom from './smart_dom';
+
+export  default  SmartDom;
