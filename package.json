@@ -1,6 +1,6 @@
 {
   "name": "smart-dom",
-  "private": true,
+  "private": false,
   "version": "1.0.3",
   "type": "module",
   "entryPoint": "src/index.ts",
