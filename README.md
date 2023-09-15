@@ -26,17 +26,17 @@ You can use SmartDOM to find elements in the DOM using various criteria:
 
 Find by Text
 ```js
-const elementsByText = smartDOM.find({ text: 'Example Text' });
+const elementsByText = smartDOM.findElement({ text: 'Example Text' });
 ```
 
 Find by Tag Name
 ```js
-const elementsByTagName = smartDOM.find({ tagName: 'div' });
+const elementsByTagName = smartDOM.findElement({ tagName: 'div' });
 ```
 
 Find by Attributes
 ```js
-const elementsByAttributes = smartDOM.find({
+const elementsByAttributes = smartDOM.findElement({
   attributes: {
     class: 'example-class',
     data: 'value'

@@ -1,74 +1,96 @@
-import { expect, test, describe, beforeEach, afterEach } from 'vitest'
+import { expect, test, describe, beforeEach } from 'vitest'
 import SmartDOM from '../src/smart_dom';
 import { JSDOM } from 'jsdom';
 
-// Mock the DOM environment
-const dom = new JSDOM();
-const document = dom.window.document;
+const dom = new JSDOM(`
+    <!DOCTYPE html>
+    <div>
+        <h1 id="heading">
+            Welcome to My Website
+        </h1>
+        <p>
+            This is a sample paragraph of text on my website.
+        </p>
+        <ul>
+            <li id="first_item_in_list">
+                Item 1
+            </li>
+            <li>
+                Item 2
+            </li>
+            <li>
+                Item 3
+            </li>
+        </ul>
+    </div>
+`, {
+    url: "https://example.org/",
+  });
 
 describe('SmartDom', () => {
-    let smartDom;
+    let smartDom, document, window;
 
     beforeEach( () => {
         smartDom = new SmartDOM( dom.window );
-        buildWEBPage();
+        document = dom.window.document;
+        window = dom.window;
+        global.Element = window.Element; // eslint-disable-line no-undef
     } )
 
-    afterEach( () => {
-        document.body.children[ 0 ].remove();
-    } ) 
-
-    describe( 'findElement()', () => {
+    describe( 'find by text option', () => {
         test( 'should return null if there is no options', () => {
             expect(smartDom.findElement()).toBe( null )
         } )
     
         test( 'should return proper DOM element by text option', () => {
-            const elementsContent = 'Item 1';
             const itemFromDOM = document.querySelector( '#first_item_in_list' );
-            const itemCreatedSyntactically = document.createElement('li');
-            
-            itemCreatedSyntactically.textContent = elementsContent;
             
             const matches = smartDom.findElement( {
-                text: elementsContent
+                text: 'Item 1'
             } )
-        
+
             expect(matches[ 0 ]).toEqual( itemFromDOM )
-            expect(matches[ 0 ]).not.toEqual( itemCreatedSyntactically )
+            expect(matches[ 0 ]).not.toEqual( null )
+        } )
+
+        test( 'should return heading by text option', () => {
+            const itemFromDOM = document.querySelector( '#heading' );
+            
+            const matches = smartDom.findElement( {
+                text: 'Welcome to My Website'
+            } )
+
+            expect(matches[ 0 ]).toEqual( itemFromDOM )
+            expect(matches[ 0 ]).not.toEqual( null )
+        } )
+    } )
+
+    describe( 'find by attribute', () => {
+        test( 'should return proper DOM element by text option', () => {
+            const itemFromDOM = document.querySelector( '#first_item_in_list' );
+
+            const matches = smartDom.findElement( {
+                attributes: {
+                    id: "first_item_in_list"
+                }
+            } )
+
+            expect(matches[ 0 ]).toEqual( itemFromDOM )
+            expect(matches[ 0 ]).not.toEqual( null )
+        } )
+    } )
+
+    describe( 'find by tag name', () => {
+        test( 'should return proper DOM element by text option', () => {
+            const itemFromDOM = document.querySelector( '#heading' );
+
+
+            const matches = smartDom.findElement( {
+                tagName: 'h1'
+            } )
+
+            expect(matches[ 0 ]).toEqual( itemFromDOM )
+            expect(matches[ 0 ]).not.toEqual( null )
         } )
     } )
 })
-
-
-function buildWEBPage() {
-  const containerDiv = document.createElement('div');
-
-  const heading = document.createElement('h1');
-  heading.textContent = 'Welcome to My Website';
-
-  const paragraph = document.createElement('p');
-  paragraph.textContent = 'This is a sample paragraph of text on my website.';
-
-  const ul = document.createElement('ul');
-
-  const listItem1 = document.createElement('li');
-  listItem1.textContent = 'Item 1';
-  listItem1.id = 'first_item_in_list'
-
-  const listItem2 = document.createElement('li');
-  listItem2.textContent = 'Item 2';
-
-  const listItem3 = document.createElement('li');
-  listItem3.textContent = 'Item 3';
-
-  ul.appendChild(listItem1);
-  ul.appendChild(listItem2);
-  ul.appendChild(listItem3);
-
-  containerDiv.appendChild(heading);
-  containerDiv.appendChild(paragraph);
-  containerDiv.appendChild(ul);
-
-  document.body.appendChild(containerDiv);
-}
