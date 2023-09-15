@@ -44,9 +44,9 @@ export default class SmartDOM {
 
   _findByText ( text: string ): Array<Element> {
     const matches: Array<Element> = [];
-
+    
     traverseDOM( this._document.body, node => {
-      if ( node.textContent && node.nodeType === 3 && node.textContent === text && node.parentElement ) {
+      if ( node.textContent && node.nodeType === 3 && node.textContent.trim() === text.trim() && node.parentElement ) {
         matches.push( node.parentElement );
       }
     } )
