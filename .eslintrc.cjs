@@ -6,7 +6,8 @@ module.exports = {
     rules: {
         '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/array-type': 'off',
-        '@typescript-eslint/consistent-indexed-object-style': 'off'
+        '@typescript-eslint/consistent-indexed-object-style': 'off',
+        'no-undef': 'off'
     },
     "ignorePatterns": ["dist/"]
   };

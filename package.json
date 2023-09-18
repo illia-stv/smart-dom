@@ -14,7 +14,7 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "dev": "vite",
+    "manual": "vite serve test/manual",
     "prebuild": "rimraf dist",
     "build": "tsc && vite build",
     "preview": "vite preview",

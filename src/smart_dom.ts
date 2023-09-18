@@ -1,4 +1,4 @@
-import { findIntersection, traverseDOM } from './utils';
+import { checkAttribute, checkParent, checkTagName, checkText, findIntersection, traverseDOM } from './utils';
 
 export default class SmartDOM {
 
@@ -7,8 +7,8 @@ export default class SmartDOM {
   private _window: Window;
 
   constructor( window: Window ) {
-    this._window = window;
-    this._document = this._window.document;
+	this._window = window;
+	this._document = this._window.document;
   }
 
   /*
@@ -16,82 +16,91 @@ export default class SmartDOM {
   *
   * @param options you could define type of your DOM element.  
   */
-  findElement( options?: OptionType ): Array<Element> | null {
-    const collection = [];
+  findElement( options?: ElementType ): Array<Element> | null {
+	const collection = [];
 
-    if( !options ){
-      return null;
-    }
+	if( !options ){
+		return null;
+	}
 
-    if( options.text ) {
-      collection.push(this._findByText( options.text ))
-    }
+	if( options.text ) {
+		collection.push(this._findByText( options.text ))
+	}
 
-    if( options.attributes ) {
-      collection.push(this._findByAttributes( options.attributes ))
-    }
+	if( options.attributes ) {
+		collection.push(this._findByAttributes( options.attributes ))
+	}
 
-    if( options.tagName ) {
-      collection.push(this._findByTagName( options.tagName ))
-    }
+	if( options.tagName ) {
+		collection.push(this._findByTagName( options.tagName ))
+	}
 
-    return findIntersection( collection );
+	if( options.parent ) {
+		collection.push(this._findByParent( options.parent ))
+	}
+
+	return findIntersection( collection );
+  }
+
+  _findByParent ( parent: ElementType ): Array<Element> {
+	const matches: Array<Element> = [];
+
+	traverseDOM( this._document.body, node => {
+		if ( checkParent( node, parent ) ) {
+			matches.push( node );
+		}
+	} )
+
+	return matches;
   }
 
   _findByText ( text: string ): Array<Element> {
-    const matches: Array<Element> = [];
-    
-    traverseDOM( this._document.body, node => {
+	const matches: Array<Element> = [];
+	
+	traverseDOM( this._document.body, node => {
+		if ( checkText( node, text ) ) {
+			matches.push( node );
+		}
+	} )
 
-      if ( 
-        node.textContent && 
-        node.nodeType === 1 &&
-        node.textContent.trim() === text.trim()
-       ) {
-        matches.push( node );
-       }
-    } )
-
-    return matches;
+	return matches;
   }
 
   _findByAttributes( attribute: AttributeType ): Array<Element> {
-    const matches: Array<Element> = [];
+	const matches: Array<Element> = [];
 
-    traverseDOM( this._document.body, node => {
-      for (const attributeName in attribute) {
-        if( 
-            node.nodeType === 1 &&
-            node.getAttribute( attributeName ) === attribute[ attributeName ] 
-        ) {
-          matches.push( node );
-        }
-      }
-    } )
+	traverseDOM( this._document.body, node => {
+		for (const attributeName in attribute) {
+			if ( checkAttribute( node, attributeName, attribute ) ) {
+				matches.push( node );
+			}
+		}
+	} )
 
-    return matches;
+	return matches;
   }
 
   _findByTagName( tagName: string ): Array<Element> {
-    const matches: Array<Element> = [];
-    const body = this._document.body as HTMLElement;
+	const matches: Array<Element> = [];
+	const body = this._document.body as HTMLElement;
 
-    traverseDOM( body, node => {
-      if ( node.tagName && node.tagName === tagName.toUpperCase() ) {
-        matches.push( node );
-      }
-    } )
+	traverseDOM( body, node => {
+		if ( checkTagName( node, tagName ) ) {
+			matches.push( node );
+		}
+	} )
 
-    return matches;
+	return matches;
   }
 }
  
-interface AttributeType {
+export interface AttributeType {
   [ key: string ] : string | true;
 }
 
-interface OptionType {
+export interface ElementType {
   text?: string,
   tagName?: string,
-  attributes?: AttributeType
+  attributes?: AttributeType,
+  parent?: ElementType
 }
