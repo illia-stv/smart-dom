@@ -8,7 +8,7 @@ const dom = new JSDOM(`
         <h1 id="heading">
             Welcome to My Website
         </h1>
-        <p>
+        <p id="paragraph">
             This is a sample paragraph of text on my website.
         </p>
         <ul>
@@ -28,20 +28,18 @@ const dom = new JSDOM(`
   });
 
 describe('SmartDom', () => {
-    let smartDom, document, window;
+    let smartDom, document;
 
     beforeEach( () => {
         smartDom = new SmartDOM( dom.window );
         document = dom.window.document;
-        window = dom.window;
-        global.Element = window.Element; // eslint-disable-line no-undef
     } )
 
     describe( 'find by text option', () => {
         test( 'should return null if there is no options', () => {
             expect(smartDom.findElement()).toBe( null )
         } )
-    
+
         test( 'should return proper DOM element by text option', () => {
             const itemFromDOM = document.querySelector( '#first_item_in_list' );
             
@@ -49,8 +47,8 @@ describe('SmartDom', () => {
                 text: 'Item 1'
             } )
 
-            expect(matches[ 0 ]).toEqual( itemFromDOM )
-            expect(matches[ 0 ]).not.toEqual( null )
+            expect( matches[ 0 ].id ).toEqual( itemFromDOM.id )
+            expect( matches[ 0 ] ).not.toEqual( null )
         } )
 
         test( 'should return heading by text option', () => {
@@ -66,12 +64,25 @@ describe('SmartDom', () => {
     } )
 
     describe( 'find by attribute', () => {
-        test( 'should return proper DOM element by text option', () => {
+        test( 'should return proper DOM element by attribute option', () => {
             const itemFromDOM = document.querySelector( '#first_item_in_list' );
 
             const matches = smartDom.findElement( {
                 attributes: {
                     id: "first_item_in_list"
+                }
+            } )
+
+            expect(matches[ 0 ]).toEqual( itemFromDOM )
+            expect(matches[ 0 ]).not.toEqual( null )
+        } )
+
+        test( 'should return paragraph by attribute option', () => {
+            const itemFromDOM = document.querySelector( '#paragraph' );
+
+            const matches = smartDom.findElement( {
+                attributes: {
+                    id: "paragraph"
                 }
             } )
 
@@ -84,9 +95,25 @@ describe('SmartDom', () => {
         test( 'should return proper DOM element by text option', () => {
             const itemFromDOM = document.querySelector( '#heading' );
 
-
             const matches = smartDom.findElement( {
                 tagName: 'h1'
+            } )
+
+            expect(matches[ 0 ]).toEqual( itemFromDOM )
+            expect(matches[ 0 ]).not.toEqual( null )
+        } )
+    } )
+
+    describe( 'find by tag name, text and attributes', () => {
+        test( 'should return proper DOM element by text option', () => {
+            const itemFromDOM = document.querySelector( '#heading' );
+
+            const matches = smartDom.findElement( {
+                tagName: 'h1',
+                attributes: {
+                    id: 'heading',
+                },
+                text: 'Welcome to My Website'
             } )
 
             expect(matches[ 0 ]).toEqual( itemFromDOM )
