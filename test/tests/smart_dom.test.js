@@ -1,5 +1,5 @@
 import { expect, test, describe, beforeEach } from 'vitest'
-import SmartDOM from '../src/smart_dom';
+import SmartDOM from '../../src/smart_dom';
 import { JSDOM } from 'jsdom';
 
 const dom = new JSDOM(`
@@ -105,7 +105,7 @@ describe('SmartDom', () => {
     } )
 
     describe( 'find by tag name, text and attributes', () => {
-        test( 'should return proper DOM element by text option', () => {
+        test( 'should return proper DOM element by all criterias', () => {
             const itemFromDOM = document.querySelector( '#heading' );
 
             const matches = smartDom.findElement( {
