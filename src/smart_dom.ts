@@ -7,10 +7,6 @@ export default class SmartDOM {
   private _window: Window;
 
   constructor( window: Window ) {
-    if ( !window ) {
-      throw new Error( "Window is not defined" );
-    } 
-
     this._window = window;
     this._document = this._window.document;
   }
@@ -46,9 +42,14 @@ export default class SmartDOM {
     const matches: Array<Element> = [];
     
     traverseDOM( this._document.body, node => {
-      if ( node.textContent && node.nodeType === 3 && node.textContent.trim() === text.trim() && node.parentElement ) {
-        matches.push( node.parentElement );
-      }
+
+      if ( 
+        node.textContent && 
+        node.nodeType === 1 &&
+        node.textContent.trim() === text.trim()
+       ) {
+        matches.push( node );
+       }
     } )
 
     return matches;
@@ -58,12 +59,11 @@ export default class SmartDOM {
     const matches: Array<Element> = [];
 
     traverseDOM( this._document.body, node => {
-      if( !(node instanceof Element) ) {
-        return;
-      }
-
       for (const attributeName in attribute) {
-        if( node.nodeType === 1 && node.getAttribute( attributeName ) === attribute[ attributeName ] ) {
+        if( 
+            node.nodeType === 1 &&
+            node.getAttribute( attributeName ) === attribute[ attributeName ] 
+        ) {
           matches.push( node );
         }
       }
@@ -74,12 +74,9 @@ export default class SmartDOM {
 
   _findByTagName( tagName: string ): Array<Element> {
     const matches: Array<Element> = [];
+    const body = this._document.body as HTMLElement;
 
-    traverseDOM( this._document.body, node => {
-      if( !(node instanceof Element) ) {
-        return;
-      }
-
+    traverseDOM( body, node => {
       if ( node.tagName && node.tagName === tagName.toUpperCase() ) {
         matches.push( node );
       }

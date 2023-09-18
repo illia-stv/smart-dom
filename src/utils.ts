@@ -26,11 +26,11 @@ export function findIntersection( arr: Array<Array<Element>> ) {
     return matches
 }
 
-export function traverseDOM( node: Element | ChildNode, callback: ( arg : Element | ChildNode ) => void ) {
+export function traverseDOM( node: Element, callback: ( arg : Element ) => void ) {
     callback(node);
-  
-    node.childNodes.forEach( child => {
+
+    for( const child of node.children ) {
       traverseDOM(child, callback);
-    });
+    }
   }
   
