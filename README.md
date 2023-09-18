@@ -24,6 +24,10 @@ import SmartDOM from 'smart-dom';
 
 You can use SmartDOM to find elements in the DOM using various criteria:
 
+```js
+const smartDOM = new SmartDOM( window );
+```
+
 Find by Text
 ```js
 const elementsByText = smartDOM.findElement({ text: 'Example Text' });
