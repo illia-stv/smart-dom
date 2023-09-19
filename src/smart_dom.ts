@@ -1,106 +1,71 @@
-import { checkAttribute, checkParent, checkTagName, checkText, findIntersection, traverseDOM } from './utils';
+import Matcher from './matcher';
+import { findIntersection } from './utils';
 
 export default class SmartDOM {
+	public matcher: Matcher;
 
-  private _document: Document;
-  
-  private _window: Window;
+	private _document: Document;
 
-  constructor( window: Window ) {
-	this._window = window;
-	this._document = this._window.document;
-  }
+	private _window: Window;
 
-  /*
-  * This method is for finding elements in DOM with given options.
-  *
-  * @param options you could define type of your DOM element.  
-  */
-  findElement( options?: ElementType ): Array<Element> | null {
-	const collection = [];
+	private _criterias: Array<{ callback: CriteriaCallbackType, name: string }> 
 
-	if( !options ){
-		return null;
+	constructor( window: Window ) {
+		this._window = window;
+		this._document = this._window.document;
+		this.matcher = new Matcher( this._document );
+		this._criterias = []
+
+		this._register( this.matcher.matchByParent, 'parent' );
+		this._register( this.matcher.matchByText, 'text' );
+		this._register( this.matcher.matchByAttributes, 'attributes' );
+		this._register( this.matcher.matchByTagName, 'tagName' );
 	}
 
-	if( options.text ) {
-		collection.push(this._findByText( options.text ))
-	}
+	/*
+	* This method is for finding elements in DOM with given options.
+	*
+	* @param options you could define type of your DOM element.  
+	*/
+	findElement( options?: ElementType ): Array<Element> | null {
+		const collection = [];
+		const criterias = this._criterias;
 
-	if( options.attributes ) {
-		collection.push(this._findByAttributes( options.attributes ))
-	}
-
-	if( options.tagName ) {
-		collection.push(this._findByTagName( options.tagName ))
-	}
-
-	if( options.parent ) {
-		collection.push(this._findByParent( options.parent ))
-	}
-
-	return findIntersection( collection );
-  }
-
-  _findByParent ( parent: ElementType ): Array<Element> {
-	const matches: Array<Element> = [];
-
-	traverseDOM( this._document.body, node => {
-		if ( checkParent( node, parent ) ) {
-			matches.push( node );
+		if( !options ){
+			return null;
 		}
-	} )
 
-	return matches;
-  }
+		for( const criteria of criterias ) {
+			const name = criteria.name;
+			const option = options[ name as keyof ElementType ];
 
-  _findByText ( text: string ): Array<Element> {
-	const matches: Array<Element> = [];
-	
-	traverseDOM( this._document.body, node => {
-		if ( checkText( node, text ) ) {
-			matches.push( node );
-		}
-	} )
-
-	return matches;
-  }
-
-  _findByAttributes( attribute: AttributeType ): Array<Element> {
-	const matches: Array<Element> = [];
-
-	traverseDOM( this._document.body, node => {
-		for (const attributeName in attribute) {
-			if ( checkAttribute( node, attributeName, attribute ) ) {
-				matches.push( node );
+			if ( option ) {
+				collection.push( criteria.callback( option ) )
 			}
 		}
-	} )
 
-	return matches;
-  }
+		return findIntersection( collection );
+	}
 
-  _findByTagName( tagName: string ): Array<Element> {
-	const matches: Array<Element> = [];
-	const body = this._document.body as HTMLElement;
-
-	traverseDOM( body, node => {
-		if ( checkTagName( node, tagName ) ) {
-			matches.push( node );
+	_register( callback: CriteriaCallbackType, name: string ) {
+		const criteria = {
+			name,
+			callback: callback.bind( this )
 		}
-	} )
 
-	return matches;
-  }
+		this._criterias.push( criteria );
+	}
 }
+
+export type CriteriaCallbackType = ( args: any ) => Array<Element>;
  
 export interface AttributeType {
-  [ key: string ] : string | true;
+	[ key: string ] : string | true;
 }
 
 export interface ElementType {
-  text?: string,
-  tagName?: string,
-  attributes?: AttributeType,
-  parent?: ElementType
+	text?: string,
+	tagName?: string,
+	attributes?: AttributeType,
+	parent?: ElementType
 }
