@@ -1,57 +1,91 @@
 import type { AttributeType, ElementType } from "./smart_dom";
 
+export type CheckCallbackType = ( node: Element, ...args: any ) => boolean;
+
 export default class Validator {
-    static checkText ( node: Element, text: string ): boolean {
-        if ( 
-            node.textContent && 
-            node.nodeType === 1 &&
-            node.textContent.trim() === text.trim()
-        ) {
-            return true;
-        }
-    
-        return false;
-    }
-    
-    static checkAttribute ( node: Element, attributeName: string, attribute: AttributeType ): boolean {
-        if( 
-            node.nodeType === 1 &&
-            node.getAttribute( attributeName ) === attribute[ attributeName ] 
-        ) {
-            return true;
-        }
-    
-        return false;
-    }
-    
-    static checkTagName ( node: Element, tagName: string ): boolean {
-        if ( node.tagName && node.tagName === tagName.toUpperCase() ) {
-            return true;
-        }
-    
-        return false;
+
+    private _checkers: Map< string, CheckCallbackType >;
+
+    constructor() {
+        this._checkers = new Map();
+
+        this._createCheckTagName();
+        this._createTextChecker();
+        this._createAttributeChecker();
+        this._createParentChecker();
     }
 
-    static checkParent ( node: Element, parent: ElementType ): boolean {
-        if ( node.parentElement && this.checkAll( node.parentElement, parent ) ) {
-            return true;
+    setChecker( checkCallback: CheckCallbackType, name: string ): void {
+        this._checkers.set( name, checkCallback );
+    }
+
+    getChecker( name: string ): CheckCallbackType | undefined {
+        return this._checkers.get( name );
+    }
+
+    _createTextChecker() {
+        const checkCallback = ( node: Element, text: string ) => {
+            return !!( 
+                node.textContent && 
+                node.nodeType === 1 &&
+                node.textContent.trim() === text.trim()
+            )
         }
-    
-        return false;
+
+        this.setChecker( checkCallback, 'checkText' )
+    }
+
+    _createCheckTagName() {
+        const checkCallback = ( node: Element, tagName: string ) => {
+            return !!( 
+                node.tagName &&
+                node.tagName === tagName.toUpperCase()
+            )
+        }
+
+        this.setChecker( checkCallback, 'checkTagName' )
+    }
+
+    _createAttributeChecker() {
+        const checkCallback = ( node: Element, attributeName: string, attribute: AttributeType ) => {
+            return !!( 
+                node.nodeType === 1 &&
+                node.getAttribute( attributeName ) === attribute[ attributeName ]
+            )
+        }
+
+        this.setChecker( checkCallback, 'checkAttribute' )
+    }
+
+    _createParentChecker() {
+        const checkCallback = ( node: Element, parent: ElementType ) => {
+            return !!( 
+                node.parentElement &&
+                this.checkAll( node.parentElement, parent )
+            )
+        }
+
+        this.setChecker( checkCallback, 'checkParent' )
     }
     
-    static checkAll ( node: Element, element: ElementType ): boolean {
-        if ( element.text && !this.checkText( node, element.text ) ) {
+    public checkAll ( node: Element, element: ElementType ): boolean {
+        const checkText = this.getChecker( 'checkText' );
+        const checkTagName = this.getChecker( 'checkTagName' );
+        const checkAttribute = this.getChecker( 'checkAttribute' );
+        const checkParent = this.getChecker( 'checkParent' );
+
+
+        if ( element.text && checkText && !checkText( node, element.text ) ) {
             return false;
         }
     
-        if ( element.tagName && !this.checkTagName( node, element.tagName ) ) {
+        if ( element.tagName && checkTagName && !checkTagName( node, element.tagName ) ) {
             return false;
         }
     
         if ( element.attributes ) {
             for ( const attribute in element.attributes ) {
-                if ( !this.checkAttribute( node, attribute, element.attributes ) ) {
+                if ( checkAttribute && !checkAttribute( node, attribute, element.attributes ) ) {
                     return false;
                 }
             }
@@ -62,7 +96,7 @@ export default class Validator {
                 return false;
             }
     
-            if ( !this.checkParent( node, element.parent ) ) {
+            if ( checkParent && !checkParent( node, element.parent ) ) {
                 return false;
             }
         }

@@ -1,4 +1,4 @@
-import validator from "./validator";
+import Validator from "./validator";
 import { traverseDOM } from "./utils";
 import type { AttributeType, ElementType } from "./smart_dom";
 
@@ -12,34 +12,37 @@ export default class Matcher {
     public matchByAttributes: ( arg: AttributeType ) => Array<Element>;
     
     public matchByTagName: ( arg: string ) => Array<Element>;
-    
+
+	public validator: Validator;
+
     private _document: Document;
 
     constructor( document: Document ) {
         this._document = document;
+        this.validator = new Validator()
 
         this.matchByParent = this._matchTemplate( ( node, argument, matches ) => {
-            if ( validator.checkParent( node, argument ) ) {
+            if ( this.validator.getChecker( 'checkParent' )!( node, argument ) ) {
 				matches.push( node );
 			}
         } )
 
         this.matchByText = this._matchTemplate( ( node, argument, matches ) => {
-            if ( validator.checkText( node, argument ) ) {
+            if ( this.validator.getChecker( 'checkText' )!( node, argument ) ) {
 				matches.push( node );
 			}
         } )
 
-        this.matchByAttributes = this._matchTemplate( ( node, argument, matches ) => {
-            for (const attributeName in argument) {
-				if ( validator.checkAttribute( node, attributeName, argument ) ) {
+        this.matchByAttributes = this._matchTemplate( ( node, attribute, matches ) => {
+            for ( const attributeName in attribute ) {
+				if ( this.validator.getChecker( 'checkAttribute' )!( node, attributeName, attribute ) ) {
 					matches.push( node );
 				}
 			}
         } )
 
         this.matchByTagName = this._matchTemplate( ( node, argument, matches ) => {
-            if ( validator.checkTagName( node, argument ) ) {
+            if ( this.validator.getChecker( 'checkTagName' )!( node, argument ) ) {
 				matches.push( node );
 			}
         } )
