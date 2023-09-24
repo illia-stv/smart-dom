@@ -1,6 +1,10 @@
 import type { AttributeType, ElementType } from "./smart_dom";
 
-export type CheckCallbackType = ( node: Element, ...args: any ) => boolean;
+export interface CheckCallbackType {
+    execute: ExecuteCallbackType;
+    name: string;
+}
+export type ExecuteCallbackType = ( node: Element, ...args: any ) => boolean;
 
 export default class Validator {
 
@@ -32,7 +36,13 @@ export default class Validator {
             )
         }
 
-        this.setChecker( checkCallback, 'checkText' )
+        this.setChecker(
+            {
+                execute: checkCallback,
+                name: 'text'
+            }, 
+            'checkText'
+        )
     }
 
     _createCheckTagName() {
@@ -43,60 +53,56 @@ export default class Validator {
             )
         }
 
-        this.setChecker( checkCallback, 'checkTagName' )
+        this.setChecker( 
+            {
+                execute: checkCallback,
+                name: 'tagName'
+            },
+            'checkTagName'
+        )
     }
 
     _createAttributeChecker() {
-        const checkCallback = ( node: Element, attributeName: string, attribute: AttributeType ) => {
-            return !!( 
-                node.nodeType === 1 &&
-                node.getAttribute( attributeName ) === attribute[ attributeName ]
-            )
+        const checkCallback = ( node: Element, attribute: AttributeType ) => {
+            for ( const attributeName in attribute ) {
+                if ( node.nodeType === 1 && node.getAttribute( attributeName ) !== attribute[ attributeName ] ) {
+                    return false;
+                }
+            }
+            return true;
         }
 
-        this.setChecker( checkCallback, 'checkAttribute' )
+        this.setChecker( 
+            {
+                execute: checkCallback,
+                name: 'attribute'
+            },
+            'checkAttribute'
+        )
     }
 
     _createParentChecker() {
         const checkCallback = ( node: Element, parent: ElementType ) => {
             return !!( 
-                node.parentElement &&
+                node && node.parentElement &&
                 this.checkAll( node.parentElement, parent )
             )
         }
 
-        this.setChecker( checkCallback, 'checkParent' )
+        this.setChecker( 
+            {
+                execute: checkCallback,
+                name: 'parent'
+            },
+            'checkParent'
+        )
     }
     
     public checkAll ( node: Element, element: ElementType ): boolean {
-        const checkText = this.getChecker( 'checkText' );
-        const checkTagName = this.getChecker( 'checkTagName' );
-        const checkAttribute = this.getChecker( 'checkAttribute' );
-        const checkParent = this.getChecker( 'checkParent' );
+        for( const [, checker] of this._checkers ) {
+            const checkerName = checker.name;
 
-
-        if ( element.text && checkText && !checkText( node, element.text ) ) {
-            return false;
-        }
-    
-        if ( element.tagName && checkTagName && !checkTagName( node, element.tagName ) ) {
-            return false;
-        }
-    
-        if ( element.attributes ) {
-            for ( const attribute in element.attributes ) {
-                if ( checkAttribute && !checkAttribute( node, attribute, element.attributes ) ) {
-                    return false;
-                }
-            }
-        }
-    
-        if ( element.parent ) {
-            if ( !node ) {
-                return false;
-            }
-    
-            if ( checkParent && !checkParent( node, element.parent ) ) {
+            if ( element && element[ checkerName ] && !checker.execute( node, element[ checkerName ] ) ) {
                 return false;
             }
         }

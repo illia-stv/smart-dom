@@ -19,34 +19,34 @@ export default class Matcher {
 
     constructor( document: Document ) {
         this._document = document;
-        this.validator = new Validator()
+        this.validator = new Validator();
 
         this.matchByParent = this._matchTemplate( ( node, argument, matches ) => {
-            if ( this.validator.getChecker( 'checkParent' )!( node, argument ) ) {
+            if ( this.validator.getChecker( 'checkParent' )!.execute( node, argument ) ) {
 				matches.push( node );
 			}
         } )
 
         this.matchByText = this._matchTemplate( ( node, argument, matches ) => {
-            if ( this.validator.getChecker( 'checkText' )!( node, argument ) ) {
+            if ( this.validator.getChecker( 'checkText' )!.execute( node, argument ) ) {
 				matches.push( node );
 			}
         } )
 
         this.matchByAttributes = this._matchTemplate( ( node, attribute, matches ) => {
-            for ( const attributeName in attribute ) {
-				if ( this.validator.getChecker( 'checkAttribute' )!( node, attributeName, attribute ) ) {
-					matches.push( node );
-				}
-			}
+            if ( this.validator.getChecker( 'checkAttribute' )!.execute( node, attribute ) ) {
+                matches.push( node );
+            }
         } )
 
         this.matchByTagName = this._matchTemplate( ( node, argument, matches ) => {
-            if ( this.validator.getChecker( 'checkTagName' )!( node, argument ) ) {
+            if ( this.validator.getChecker( 'checkTagName' )!.execute( node, argument ) ) {
 				matches.push( node );
 			}
         } )
     }
+
+
 
     _matchTemplate ( callback: ValidateCallback ) {
         return ( argument: any ) => {

@@ -31,7 +31,7 @@ export default class SmartDOM {
 		const collection = [];
 		const criterias = this._criterias;
 
-		if( !options ){
+		if ( !options ) {
 			return null;
 		}
 
@@ -60,12 +60,9 @@ export default class SmartDOM {
 export type CriteriaCallbackType = ( args: any ) => Array<Element>;
  
 export interface AttributeType {
-	[ key: string ] : string | true;
+	[ key: string ] : string;
 }
 
 export interface ElementType {
-	text?: string,
-	tagName?: string,
-	attributes?: AttributeType,
-	parent?: ElementType
+	[ key: string ] : string;
 }
