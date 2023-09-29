@@ -2,23 +2,32 @@ import SmartDOM from "../../src/smart_dom";
 
 const smartDOM = new SmartDOM( window );
 
-const target = document.getElementById( 'target' );
+smartDOM.addCriteria( 'childElementCount', ( node, attribute ) => {
+    return !!( node.childElementCount === attribute );
+} )
+
+smartDOM.addCriteria( 'nodeType', ( node, attribute ) => {
+    return !!( node.nodeType === attribute );
+} )
 
 const elements = smartDOM.findElement( {
+    text: 'About',
+    tagName: 'li',
+    children: [
+        {
+            tagName: 'a',
+            attributes: {
+                href: '#'
+            }
+        }
+    ],
     parent: {
-        attributes: {
-            id: 'list',
-        },
+        tagName: 'ul',
+        id: 'list',
         parent: {
             tagName: 'nav'
         }
-    },
-    tagName: 'li',
-    text: 'About'
-} )
+    }
+} );
 
 console.log( elements )
-
-for( const element of elements ) {
-    target.appendChild( element.cloneNode( true ) );
-}

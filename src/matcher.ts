@@ -1,54 +1,43 @@
-import Validator from "./validator";
+import Validator, { CheckExecuteCallback } from "./validator";
 import { traverseDOM } from "./utils";
-import type { AttributeType, ElementType } from "./smart_dom";
 
-type ValidateCallback = ( node: Element, arg: any, matches: Element[] ) => void
+type ValidateCallback = ( node: Element, arg: any, matches: Element[] ) => void;
+type MatchCallback = ( argument: any ) => Array<Element>;
 
 export default class Matcher {    
-    public matchByParent: ( arg: ElementType ) => Array<Element>;
-    
-    public matchByText: ( arg: string ) => Array<Element>;
-    
-    public matchByAttributes: ( arg: AttributeType ) => Array<Element>;
-    
-    public matchByTagName: ( arg: string ) => Array<Element>;
-
 	public validator: Validator;
 
     private _document: Document;
 
+    private _matchers: Map< string, MatchCallback >;
+
     constructor( document: Document ) {
-        this._document = document;
         this.validator = new Validator();
-
-        this.matchByParent = this._matchTemplate( ( node, argument, matches ) => {
-            if ( this.validator.getChecker( 'checkParent' )!.execute( node, argument ) ) {
-				matches.push( node );
-			}
-        } )
-
-        this.matchByText = this._matchTemplate( ( node, argument, matches ) => {
-            if ( this.validator.getChecker( 'checkText' )!.execute( node, argument ) ) {
-				matches.push( node );
-			}
-        } )
-
-        this.matchByAttributes = this._matchTemplate( ( node, attribute, matches ) => {
-            if ( this.validator.getChecker( 'checkAttribute' )!.execute( node, attribute ) ) {
-                matches.push( node );
-            }
-        } )
-
-        this.matchByTagName = this._matchTemplate( ( node, argument, matches ) => {
-            if ( this.validator.getChecker( 'checkTagName' )!.execute( node, argument ) ) {
-				matches.push( node );
-			}
-        } )
+        this._document = document;
+        this._matchers = new Map();
     }
 
+    setMatcher( matcherName: string, callback: MatchCallback ) {
+        this._matchers.set( matcherName, callback );
+    }
 
+    getMatcher( matcherName: string ) : MatchCallback | undefined {
+        return this._matchers.get( matcherName );
+    }
 
-    _matchTemplate ( callback: ValidateCallback ) {
+    addMatcher( name: string, callback: CheckExecuteCallback ) {
+        this.validator.setChecker( { execute: callback, name }, name );
+
+        this.setMatcher( name , this._matchTemplate( ( node, argument, matches ) => {
+            if ( this.validator.getChecker( name )!.execute( node, argument ) ) {
+				matches.push( node );
+			}
+        } ) );
+
+        return this.getMatcher( name );
+    }
+
+    _matchTemplate ( callback: ValidateCallback ): MatchCallback {
         return ( argument: any ) => {
             const matches: Array<Element> = [];
 

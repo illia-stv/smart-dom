@@ -1,9 +1,14 @@
 import { isEqual } from "lodash";
 
-export function findIntersection( arr: Array<Array<Element>> ) {
+export function findIntersection( arr: Array<Array<Element>> )  {
+		const matches = [];
+
+		if( !arr.length ) {
+			return [];
+		}
+
 		const firstArr = arr[ 0 ];
 		const restArr = arr.slice( 1 );
-		const matches = [];
 	
 		for( let i = 0; i < firstArr.length; i++ ) {
 			const element = firstArr[ i ];
@@ -11,7 +16,7 @@ export function findIntersection( arr: Array<Array<Element>> ) {
 	
 			for( let j = 0; j < restArr.length; j++ ) {
 				const currentArr = restArr[ j ];
-				const result = currentArr.find( item => isEqual(element, item) )
+				const result = currentArr.find( item => isEqual(element, item) );
 	
 				if( result ) {
 					counter++;
