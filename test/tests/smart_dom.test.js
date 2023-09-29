@@ -12,7 +12,7 @@ const dom = new JSDOM(`
             This is a sample paragraph of text on my website.
         </p>
         <ul>
-            <li id="first_item_in_list">
+            <li id="first_item_in_list" name="item">
                 Item 1
             </li>
             <li>
@@ -22,6 +22,13 @@ const dom = new JSDOM(`
                 Item 3
             </li>
         </ul>
+        <nav>
+            <ul id="list">
+                <li id="item_in_list" name="item">
+                    Item 1
+                </li>
+            </ul>
+        </nav>
     </div>
 `, {
     url: "https://example.org/",
@@ -69,7 +76,8 @@ describe('SmartDom', () => {
 
             const matches = smartDom.findElement( {
                 attributes: {
-                    id: "first_item_in_list"
+                    id: "first_item_in_list",
+                    name: "item"
                 }
             } )
 
@@ -97,6 +105,28 @@ describe('SmartDom', () => {
 
             const matches = smartDom.findElement( {
                 tagName: 'h1'
+            } )
+
+            expect(matches[ 0 ]).toEqual( itemFromDOM )
+            expect(matches[ 0 ]).not.toEqual( null )
+        } )
+    } )
+
+    describe( 'find by parent', () => {
+        test( 'should return proper DOM element by parent', () => {
+            const itemFromDOM = document.querySelector( '#item_in_list' );
+
+            const matches = smartDom.findElement( {
+                parent: {
+                    attributes: {
+                        id: 'list',
+                    },
+                    parent: {
+                        tagName: 'nav'
+                    }
+                },
+                tagName: 'li',
+                text: 'Item 1'
             } )
 
             expect(matches[ 0 ]).toEqual( itemFromDOM )

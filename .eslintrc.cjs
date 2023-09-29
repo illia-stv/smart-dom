@@ -7,7 +7,8 @@ module.exports = {
         '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-indexed-object-style': 'off',
-        'no-undef': 'off'
+        'no-undef': 'off',
+        '@typescript-eslint/no-explicit-any': 'off'
     },
     "ignorePatterns": ["dist/"]
   };
