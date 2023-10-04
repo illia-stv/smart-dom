@@ -1,14 +1,10 @@
 # SmartDOM
 
-SmartDOM is a JavaScript class for efficient DOM manipulation and element retrieval.
+SmartDOM is a JavaScript library for efficient DOM element searching.
 
 ## Installation
 
-To use SmartDOM in your project, you can install it via npm or include it directly in your HTML file.
-
-### npm
-
-You can install SmartDOM using npm:
+To use SmartDOM in your project, you can install it via npm.
 
 ```bash
 npm install smart-dom
@@ -28,24 +24,48 @@ You can use SmartDOM to find elements in the DOM using various criteria:
 const smartDOM = new SmartDOM( window );
 ```
 
-Find by Text
+Find by text
 ```js
-const elementsByText = smartDOM.findElement({ text: 'Example Text' });
+const elementsByText = smartDOM.findElement( { 
+  text: 'Example Text' 
+} );
 ```
 
-Find by Tag Name
+Find by tag name
 ```js
-const elementsByTagName = smartDOM.findElement({ tagName: 'div' });
+const elementsByTagName = smartDOM.findElement( { 
+  tagName: 'div'
+} );
 ```
 
-Find by Attributes
+Find by attributes
 ```js
-const elementsByAttributes = smartDOM.findElement({
+const elementsByAttributes = smartDOM.findElement( {
   attributes: {
     class: 'example-class',
-    data: 'value'
+    text: 'value'
   }
-});
+} );
+```
+
+Find by parent
+```js
+const elementsByAttributes = smartDOM.findElement( {
+  parent: {
+    class: 'parent-class',
+    tagName: 'div'
+  }
+} );
+```
+
+Find by children
+```js
+const elementsByAttributes = smartDOM.findElement( {
+  children: [ {
+    class: 'children-class',
+    tagName: 'div'
+  } ]
+} );
 ```
 
 # API
